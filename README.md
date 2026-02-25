@@ -1,5 +1,5 @@
 # entropy-and-equity
-A collaborative financial modeling repository for Physics/Finance students exploring the limits of predictable equity.
+A collaborative financial modeling repository for Physics/Finance students exploring the limits of predictable equity. The goal is to build an impressive project, to learn and display skills in quant finance, also ideally turning a profit by focusing on low to mid volume trades to avoid competing with large financial firms. 
 
 ### Contributors ###
 Morik Aghayan (morik.aghayan@gmail.com)
