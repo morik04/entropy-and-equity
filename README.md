@@ -1,6 +1,10 @@
 # entropy-and-equity
 A collaborative financial modeling repository for Physics/Finance students exploring the limits of predictable equity.
 
+
+
+### Description ###
+
 src\Fourier_Modeling.ipynb
 Using fourier series of n harmonics to model financial assets.
 Works better for commodoties such as soybeans and corn as the pattern is more periodic
