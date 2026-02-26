@@ -13,24 +13,21 @@ Where:
 * $\sigma$ is the volatility of the underlying asset
 * $t$ is time
 
-## Options Pricing Models
+## `calc_opt_price_change`
 
-Several models are used for option pricing including:
+This function uses a second-order Taylor approximation to estimate the change in an option’s value:
 
-### European Options
+$$
+dV \approx \Theta \cdot \text{t} + \Delta \cdot dS + \frac{1}{2}\Gamma (dS)^2
+$$
 
-The price of a European call option can be calculated using the Black-Scholes formula:
+where:
 
-$$C = S_0 N(d_1) - Xe^{-rT} N(d_2)$$
+- $dV$ is the estimated change in option price
+- $\Theta$ measures time decay per day
+- $\Delta$ measures sensitivity to changes in the underlying asset price
+- $\Gamma$ measures how delta changes as the underlying price moves
+- $dS$ is the change in the underlying asset price
+- t is the number of days elapsed
 
-Where:
-
-$$d_1 = \frac{\ln(S_0/X) + (r + \sigma^2/2)T}{\sigma\sqrt{T}}$$
-
-$$d_2 = d_1 - \sigma\sqrt{T}$$
-
-And $N(d)$ is the cumulative distribution function of the standard normal distribution, $C$ is the call option price, $S_0$ is the current stock price, $X$ is the strike price, and $T$ is the time to expiration.
-
-### American Options
-
-American options can be exercised at any time before expiration, which makes their pricing more complex. In practice, numerical methods such as binomial trees or Monte Carlo simulations are used to estimate their values.
+Keep in mind this is a very rough estimate. Time decay ($\Theta$) tends to increase as the option nears its expiration date. 
