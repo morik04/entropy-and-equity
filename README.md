@@ -25,3 +25,6 @@ Reader also included, make sure header of csv matches or it wont work.
 # data\
 Includes csv files of finiancial assets. Make sure left column is labeled 'Date'
 and format is YYYY-MM-DD. Right column should be 'Adj Close' and the format should be float.
+
+# docs\
+Explanation of math/logic implemented in code
