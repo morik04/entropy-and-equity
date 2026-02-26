@@ -1,10 +1,11 @@
-# Math behind `fit_fourier_series`
+# Fourier Modeling
+## `fit_fourier_series`
 
 This function fits a truncated Fourier series to sampled data.
 
 Inputs are: days (int format); prices; number of harmonics; period (optional)
 
-## Model
+## Logic
 
 Given data points
 
