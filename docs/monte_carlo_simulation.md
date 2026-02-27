@@ -1,13 +1,13 @@
-# Monte Carlo simulation of stock prices
+# Monte Carlo Simulation
 
 This code uses a Monte Carlo simulation to model possible future stock prices under the assumption that the stock follows **geometric Brownian motion**.
 
 ## Why this is relevant
 
-Stock-price dynamics are modeled as:
+The change in stock price is modeled as:
 
 $$
-dS = \mu S\dt + \sigma S\dW,
+dS = \mu S\ dt + \sigma S\ dW 
 $$
 
 where:
@@ -21,13 +21,13 @@ where:
 In Monte Carlo simulation, the random Brownian term is modeled as
 
 $$
-dW = \sqrt{dt}\,Z, \qquad Z \sim \mathcal{N}(0,1).
+dW = \sqrt{dt}\ Z, \qquad Z \sim \mathcal{N}(0,1)
 $$
 
 Substituting this into the stock-price equation gives
 
 $$
-dS \approx \mu S\,dt + \sigma S\,\sqrt{dt}\,Z.
+dS \approx \mu S\ dt + \sigma S\ \sqrt{dt}\ Z 
 $$
 
 This is exactly the equation used in the code.
@@ -48,19 +48,19 @@ The code simulates many possible one-year price paths for a stock, starting from
 For each simulated path, the stock price is updated each day using
 
 $$
-ds = \mu s\,dt + \sigma s\,z\sqrt{dt},
+ds = \mu s\ dt + \sigma s\ z\sqrt{dt} 
 $$
 
 where $z$ is a newly sampled standard normal random variable:
 
 $$
-z \sim \mathcal{N}(0,1).
+z \sim \mathcal{N}(0,1)
 $$
 
 Then the code updates the stock price by
 
 $$
-s \leftarrow s + ds.
+s \leftarrow s + ds
 $$
 
 This is the discrete-time Euler approximation of the continuous-time stochastic differential equation.
@@ -74,7 +74,7 @@ Each simulated daily price change has two parts:
 ### Drift term
 
 $$
-\mu s\,dt
+\mu s\ dt
 $$
 
 This is the deterministic part, representing the expected growth of the stock over a small time interval.
@@ -82,7 +82,7 @@ This is the deterministic part, representing the expected growth of the stock ov
 ### Random shock term
 
 $$
-\sigma s\z\sqrt{dt}
+\sigma s\ z\sqrt{dt}
 $$
 
 This is the stochastic part, representing daily randomness driven by Brownian motion.
@@ -90,7 +90,7 @@ This is the stochastic part, representing daily randomness driven by Brownian mo
 Together they produce
 
 $$
-ds = \mu s\,dt + \sigma s\,z\sqrt{dt},
+ds = \mu s\ dt + \sigma s\ z\sqrt{dt},
 $$
 
 which is the simulated daily change in stock price.
@@ -107,10 +107,6 @@ After all simulations are complete, it estimates the probability that the stock 
 
 $$
 \text{Chance of gain} =
-\frac{\text{number of simulations with final price } > 100}{\text{total number of simulations}}.
+\frac{\text{number of simulations with final price } > \text{intial price}}{\text{total number of simulations}}
 $$
 
-So the output
-
-```python
-print(f"Chance of gain is {100*count/shots}")
