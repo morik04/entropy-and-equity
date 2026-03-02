@@ -1,6 +1,8 @@
 # To-do
 
-For all edits make sure to fork and pull request!!
+### update monte carlo sim
+
+### plug monte carlo sim into options
 
 ### Solve pdes with quantum through qiskit
 
