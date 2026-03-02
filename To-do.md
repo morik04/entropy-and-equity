@@ -2,9 +2,9 @@
 
 ### Expand/Polish
 
-* update monte carlo sim
+* update monte carlo sim to change volatility 
 
-* plug monte carlo sim into options
+* plug monte carlo sim into options ---> update gamma handeling
 
 * build paper trading through frequent API calls and benchmark success
 
