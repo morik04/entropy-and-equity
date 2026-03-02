@@ -1,13 +1,15 @@
 # To-do
 
-### update monte carlo sim
+### Expand/Polish
 
-### plug monte carlo sim into options
+* update monte carlo sim
 
-### Solve pdes with quantum through qiskit
+* plug monte carlo sim into options
 
-### build paper trading through frequent API calls and benchmark success
+* build paper trading through frequent API calls and benchmark success
 
-### build documentaion folder
+### Expiriment
 
-### try ML approach
+* Solve pdes with quantum through qiskit
+
+* try ML approach
