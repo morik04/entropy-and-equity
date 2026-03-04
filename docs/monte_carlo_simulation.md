@@ -107,6 +107,46 @@ After all simulations are complete, it estimates the probability that the stock 
 
 $$
 \text{Chance of gain} =
-\frac{\text{number of simulations with final price } > \text{intial price}}{\text{total number of simulations}}
+\frac{\text{number of simulations with final price } > \text{initial price}}{\text{total number of simulations}}
 $$
+
+---
+
+## Exact GBM discretisation
+
+The code uses the **exact log-normal step** rather than the first-order Euler-Maruyama approximation:
+
+$$
+S_{t+dt} = S_t \exp\!\left[\left(\mu - \tfrac{1}{2}\sigma^2\right)dt + \sigma\sqrt{dt}\,Z\right]
+$$
+
+This is the analytically exact solution to the GBM SDE for a single step, so it eliminates the $O(dt)$ discretisation bias that accumulates in the Euler scheme.
+
+---
+
+## Sharpe ratio
+
+After generating all simulated paths the code computes the **Sharpe ratio** from the cross-sectional distribution of annualised returns:
+
+$$
+\text{Sharpe} = \frac{\bar{r}_{\text{annualised}} - r_f}{\sigma_{r_{\text{annualised}}}}
+$$
+
+where $r_f$ is the risk-free rate (set to 4 % by default as a demonstration; adjust to the current 10-year Treasury yield). A Sharpe ratio above 1.0 is generally considered good; above 2.0 is excellent, though the appropriate threshold depends on strategy and time horizon.
+
+---
+
+## Exact formulas (closed form)
+
+Instead of always running the full simulation, the expected value and chance of gain can be calculated analytically:
+
+$$
+\mathbb{E}[S_T] = S_0 e^{\mu T}
+$$
+
+$$
+P(S_T > S_0) = \Phi\!\left(\frac{\left(\mu - \frac{\sigma^2}{2}\right)\sqrt{T}}{\sigma}\right)
+$$
+
+where $\Phi$ is the standard normal CDF. These match the simulation results to within sampling noise.
 

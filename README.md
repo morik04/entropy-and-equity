@@ -1,30 +1,122 @@
-# entropy-and-equity
-A collaborative financial modeling repository for Physics/Finance students exploring the limits of predictable equity. The goal is to build an impressive project, to learn and display skills in quant finance, also ideally turning a profit by focusing on low to mid volume trades to avoid competing with large financial firms. 
+# Entropy & Equity — Quantitative Financial Modeling
 
-### Contributors ###
-Morik Aghayan (morik.aghayan@gmail.com)
+A physics-meets-finance research project applying mathematical modeling techniques — Fourier analysis, Monte Carlo simulation, and Black-Scholes options pricing — to real commodity and equity markets.
 
+**Author:** Morik Aghayan (morik.aghayan@gmail.com)
 
-### Description ###
+---
 
-# src\Fourier_Modeling.ipynb
-Using fourier series of n harmonics to model financial assets.
-Works better for commodoties such as soybeans and corn as the pattern is more periodic
-Make sure to set period to 252 NOT 365 (only 252 trading days in a year)
+## Overview
 
+Financial markets exhibit behaviour that is partly deterministic (seasonal cycles, drift) and partly stochastic (volatility, random shocks).  This project explores that boundary using three complementary modeling approaches, each grounded in the mathematics used by professional quant researchers.
 
-# src\Options_Modeling.ipynb
-Meant to model options using black schole equations.
-Includes a rough estimator for dV using delta, gamma, theta
+| Model | Core Idea | Best Applied To |
+|---|---|---|
+| Fourier Series | Decompose prices into periodic cycles + linear trend | Seasonal commodities (corn, soybeans) |
+| Monte Carlo (GBM) | Simulate thousands of price paths via stochastic calculus | Any equity or commodity with known μ, σ |
+| Black-Scholes / Greeks | Price options and estimate sensitivity (Δ, Γ, Θ) | Equity options |
 
+---
 
-# tools\CSV_Handeling.ipynb
-Creates csv file given ticker and date range. 
-Reader also included, make sure header of csv matches or it wont work.
+## Repository Structure
 
-# data\
-Includes csv files of finiancial assets. Make sure left column is labeled 'Date'
-and format is YYYY-MM-DD. Right column should be 'Adj Close' and the format should be float.
+```
+entropy-and-equity/
+├── src/
+│   ├── Fourier_Modeling.ipynb       # Fourier series fitting and backtesting
+│   ├── monte_carlo_simulation.ipynb # GBM Monte Carlo with Sharpe ratio
+│   └── Options_Modeling.ipynb       # Black-Scholes pricing + Greeks
+├── tools/
+│   └── CSV_Handling.ipynb           # Download price data via yfinance
+├── data/
+│   ├── corn_price.csv
+│   ├── soy_price.csv
+│   ├── oil_price.csv
+│   ├── gold_price.csv
+│   ├── soyb_etf.csv
+│   └── soybean_trading_data.csv
+├── docs/
+│   ├── fourier_modeling.md          # Full mathematical derivation
+│   ├── monte_carlo_simulation.md    # GBM derivation and interpretation
+│   └── options_modeling.md          # Black-Scholes PDE and Greeks
+└── requirements.txt
+```
 
-# docs\
-Explanation of math/logic implemented in code
+---
+
+## Notebooks
+
+### `src/Fourier_Modeling.ipynb`
+
+Fits a truncated Fourier series to commodity price time series using least-squares regression on a sinusoidal basis:
+
+$$f(x) = a_0 + \sum_{n=1}^{N} \left[ a_n \cos(n\omega x) + b_n \sin(n\omega x) \right]$$
+
+The `fit_fourier_with_trend` variant removes a linear trend first, which prevents the oscillatory terms from absorbing long-run drift.
+
+**Backtesting** is performed on corn, soybeans, oil, and the SOYB ETF.  Each backtest reports four metrics:
+- **MAE** — mean absolute error
+- **RMSE** — root mean squared error (penalises large misses)
+- **MAPE** — mean absolute percentage error
+- **R²** — proportion of variance explained by the model
+
+> **Note:** use `period = 252` (trading days per year), not 365.  Ideal harmonic count is 2–5; higher values overfit noise.
+
+---
+
+### `src/monte_carlo_simulation.ipynb`
+
+Simulates equity price paths under **geometric Brownian motion** using the exact log-normal step:
+
+$$S_{t+dt} = S_t \exp\!\left[\left(\mu - \tfrac{1}{2}\sigma^2\right)dt + \sigma\sqrt{dt}\,Z\right], \quad Z \sim \mathcal{N}(0,1)$$
+
+This is the analytically exact discretisation of the GBM SDE, avoiding the first-order Euler-Maruyama bias present in the naive `S += dS` update.
+
+The simulation reports:
+- Empirical distribution of final prices vs. the theoretical log-normal PDF
+- Probability of gain (closed-form and Monte Carlo estimate)
+- Exact expected value via $S_0 e^{\mu T}$
+- **Sharpe ratio** computed from the cross-sectional distribution of simulated total returns
+
+---
+
+### `src/Options_Modeling.ipynb`
+
+Models option prices using two complementary methods:
+
+1. **Greek approximation** — second-order Taylor expansion for short-horizon changes:
+
+$$dV \approx \Theta \cdot dt + \Delta \cdot dS + \tfrac{1}{2}\Gamma (dS)^2$$
+
+2. **Full Black-Scholes repricing** — recalculates the call price each day using the closed-form solution, which is exact under the GBM assumption and more accurate for longer holding periods.
+
+---
+
+## Data
+
+CSV files follow a two-column format:
+
+| Date (YYYY-MM-DD) | Adj Close (float) |
+|---|---|
+
+Use `tools/CSV_Handling.ipynb` to download fresh data for any ticker via `yfinance`.
+
+---
+
+## Getting Started
+
+```bash
+pip install -r requirements.txt
+jupyter notebook
+```
+
+Open any notebook in `src/` and run all cells.  Data files are included in `data/` so no API calls are needed for the pre-loaded assets.
+
+---
+
+## Mathematical Background
+
+Full derivations and explanations are in `docs/`:
+- `docs/fourier_modeling.md` — Fourier series, least-squares matrix formulation
+- `docs/monte_carlo_simulation.md` — GBM SDE, Euler-Maruyama, log-normal distribution
+- `docs/options_modeling.md` — Black-Scholes PDE, call price formula, Greeks
