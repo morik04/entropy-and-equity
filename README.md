@@ -120,3 +120,12 @@ Full derivations and explanations are in `docs/`:
 - `docs/fourier_modeling.md` — Fourier series, least-squares matrix formulation
 - `docs/monte_carlo_simulation.md` — GBM SDE, Euler-Maruyama, log-normal distribution
 - `docs/options_modeling.md` — Black-Scholes PDE, call price formula, Greeks
+
+## Author Information
+
+**Morik Aghayan**  
+Physics Major w/ Computer Science Minor | Researcher & Qiskit Advocate
+
+📧 morik.aghayan@gmail.com  
+🌐 [GitHub: morik04](https://github.com/morik04)  
+🔗 [LinkedIn](https://www.linkedin.com/in/morik-aghayan/)
