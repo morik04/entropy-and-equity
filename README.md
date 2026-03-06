@@ -2,7 +2,6 @@
 
 A physics-meets-finance research project applying mathematical modeling techniques — Fourier analysis, Monte Carlo simulation, and Black-Scholes options pricing — to real commodity and equity markets.
 
-**Author:** Morik Aghayan (morik.aghayan@gmail.com)
 
 ---
 
