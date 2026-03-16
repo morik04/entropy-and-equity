@@ -1,6 +1,6 @@
 # Entropy & Equity — Quantitative Financial Modeling
 
-A physics-meets-finance research project applying mathematical modeling techniques — Fourier analysis, Monte Carlo simulation, and Black-Scholes options pricing — to real commodity and equity markets.
+A physics-meets-finance research project applying mathematical modeling techniques — Fourier analysis, Monte Carlo simulation, quantum-enhanced Monte Carlo, and Black-Scholes options pricing — to real commodity and equity markets.
 
 
 ---
@@ -13,6 +13,7 @@ Financial markets exhibit behaviour that is partly deterministic (seasonal cycle
 |---|---|---|
 | Fourier Series | Decompose prices into periodic cycles + linear trend | Seasonal commodities (corn, soybeans) |
 | Monte Carlo (GBM) | Simulate thousands of price paths via stochastic calculus | Any equity or commodity with known μ, σ |
+| Quantum Monte Carlo | GBM paths driven by quantum-generated random numbers via Qiskit | Research / hardware-backed randomness |
 | Black-Scholes / Greeks | Price options and estimate sensitivity (Δ, Γ, Θ) | Equity options |
 
 ---
@@ -24,6 +25,7 @@ entropy-and-equity/
 ├── src/
 │   ├── Fourier_Modeling.ipynb       # Fourier series fitting and backtesting
 │   ├── monte_carlo_simulation.ipynb # GBM Monte Carlo with Sharpe ratio
+│   ├── quantum_monte_carlo.ipynb    # Quantum-enhanced GBM Monte Carlo via Qiskit
 │   └── Options_Modeling.ipynb       # Black-Scholes pricing + Greeks
 ├── tools/
 │   └── CSV_Handling.ipynb           # Download price data via yfinance
@@ -37,6 +39,7 @@ entropy-and-equity/
 ├── docs/
 │   ├── fourier_modeling.md          # Full mathematical derivation
 │   ├── monte_carlo_simulation.md    # GBM derivation and interpretation
+│   ├── quantum_monte_carlo.md       # Quantum RNG approach and circuit design
 │   └── options_modeling.md          # Black-Scholes PDE and Greeks
 └── requirements.txt
 ```
@@ -79,6 +82,31 @@ The simulation reports:
 
 ---
 
+### `src/quantum_monte_carlo.ipynb`
+
+Replaces the classical pseudo-random normal samples in GBM with **quantum-generated randomness** sourced from a Qiskit circuit.
+
+Each random draw is produced by:
+1. Placing 100 qubits in equal superposition with Hadamard gates
+2. Measuring to obtain a uniformly random bitstring
+3. Counting the number of 1s and applying the CLT normalisation (binomial → standard normal):
+
+$$Z = \frac{X - np}{\sqrt{np(1-p)}}, \qquad X \sim \text{Binomial}(n, 0.5)$$
+
+4. Scaling to any target $(\mu, \sigma)$
+
+The quantum samples are then substituted directly into the exact GBM step used in the classical simulator:
+
+$$S_{t+dt} = S_t \exp\!\left[\left(\mu - \tfrac{1}{2}\sigma^2\right)dt + \sigma\sqrt{dt}\,Z_{\text{quantum}}\right]$$
+
+Two backends are supported:
+- **Simulator** (`AerSimulator`) — runs locally with no IBM account required
+- **Real hardware** (commented out) — runs on the least-busy IBM quantum device via `QiskitRuntimeService`
+
+> **Requirements:** `qiskit`, `qiskit-aer`, `qiskit-ibm-runtime`. For real hardware, IBM Quantum credentials must be saved via `QiskitRuntimeService.save_account(...)`.
+
+---
+
 ### `src/Options_Modeling.ipynb`
 
 Models option prices using two complementary methods:
@@ -118,6 +146,7 @@ Open any notebook in `src/` and run all cells.  Data files are included in `data
 Full derivations and explanations are in `docs/`:
 - `docs/fourier_modeling.md` — Fourier series, least-squares matrix formulation
 - `docs/monte_carlo_simulation.md` — GBM SDE, Euler-Maruyama, log-normal distribution
+- `docs/quantum_monte_carlo.md` — quantum RNG circuit, CLT normalisation, hardware vs. simulator
 - `docs/options_modeling.md` — Black-Scholes PDE, call price formula, Greeks
 
 ## Author Information
